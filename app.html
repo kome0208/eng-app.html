@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>高校受験レベル英単語テスト</title>
+  <meta name="description" content="抜き打ちテスト">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: gray;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: lime;
+    }
+
+    #quiz-container {
+      max-width: 90%;
+      width: 600px;
+      margin: 100px auto;
+      font-size: 30px;
+    }
+
+    button {
+      width: 100%;
+      background-color: black;
+      padding: 10px;
+      color: lime;
+      margin-top: 10px;
+      font-size: 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #result {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 24px;
+      color: lime;
+    }
+
+    /* スマホなど幅の小さい画面向けの調整 */
+    @media (max-width: 600px) {
+      #quiz-container {
+        font-size: 24px;
+        margin: 50px auto;
+      }
+
+      button {
+        font-size: 18px;
+        padding: 8px;
+      }
+
+      #result {
+        font-size: 20px;
+      }
+    }
+  </style>
+  </head>
+<body>
+  <h1>高校受験レベル英単語テスト</h1>
+  <h2>以下のボタンを押して回答してください</h2>
+  <h2>合格点は7点です</h2>
+  <div id="quiz-container"></div>
+  <div id="result"></div>
+</body>
+  <script>
+    // 単語データ：英語 => 日本語（正解）
+    const wordList = [
+      { english: "increase", japanese: "増やす" },
+      { english: "distance", japanese: "距離" },
+      { english: "husband", japanese: "夫" },
+      { english: "relax", japanese: "くつろぐ" },
+      { english: "guide", japanese: "～を案内する" },
+      { english: "serious", japanese: "真面目な、深刻な" },
+      { english: "rock", japanese: "岩" },
+      { english: "allow", japanese: "許す" },
+      { english: "arrow", japanese: "矢" },
+      { english: "elderly", japanese: "年配の" },
+      { english: "disappear", japanese: "消える" },
+      { english: "clock", japanese: "時計" },
+      { english: "code", japanese: "符号" },
+      { english: "toward", japanese: "の方へ" },
+      { english: "deer", japanese: "シカ" },
+      { english: "generation", japanese: "世代" },
+      { english: "lion", japanese: "ライオン" },
+      { english: "silver", japanese: "銀" },
+      { english: "lily", japanese: "ユリ" },
+      { english: "invention", japanese: "発明" },
+      { english: "chemical", japanese: "化学" },
+      { english: "offer", japanese: "提供する、申し出" },
+      { english: "expression", japanese: "表現、表情" },
+      { english: "material", japanese: "原料、材料" },
+      { english: "rate", japanese: "率、割合" },
+      { english: "means", japanese: "方法、手段" },
+      { english: "shrine", japanese: "神社、神殿" },
+      { english: "release", japanese: "~を開放する" },
+      { english: "council", japanese: "協議会、議会" },
+      { english: "surface", japanese: "表面" },
+      { english: "sheet", japanese: "1枚、シート" },
+      { english: "surface", japanese: "表面" },
+      { english: "someday", japanese: "いつか、そのうちに" },
+      { english: "hate", japanese: "～を憎む" },
+      { english: "president", japanese: "大統領、社長" },
+    ];
+
+    // シャッフル関数
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+
+    let currentQuestion = 0;
+    let score = 0;
+    const quizContainer = document.getElementById("quiz-container");
+    const resultDiv = document.getElementById("result");
+
+    // 出題関数
+    function showQuestion() {
+      quizContainer.innerHTML = "";
+
+      if (currentQuestion === 10) {
+        let message = "解きなおしてみよう！　次ならできる！ *解きなおす場合は左上から読み込みを押してね";
+        if (score > 6) message = "合格点です！ *解きなおす場合は左上から読み込みを押してね";
+        if (score === 10) message = "素晴らしい！ *解きなおす場合は左上から読み込みを押してね";
+        resultDiv.textContent = `テスト終了！あなたの得点は ${score} / 10 点です。${message}`;
+        return;
+      }
+
+      // ランダムに問題と選択肢を選ぶ
+      shuffle(wordList);
+      const correct = wordList[0];
+      const choices = [correct, wordList[1], wordList[2]];
+      shuffle(choices);
+
+      // 問題表示
+      const qText = document.createElement("p");
+      qText.textContent = `Q${currentQuestion + 1}: 「${correct.english}」の意味は？`;
+      quizContainer.appendChild(qText);
+
+      // ボタン作成
+      choices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.textContent = choice.japanese;
+        btn.onclick = () => {
+          if (choice.japanese === correct.japanese) {
+            score++;
+            alert("正解！");
+          } else {
+            alert(`不正解！正解は「${correct.japanese}」でした`);
+          }
+          currentQuestion++;
+          showQuestion();
+        };
+        quizContainer.appendChild(btn);
+      });
+    }
+
+    showQuestion(); // 最初の問題を表示
+  </script>
+</body>
+</html>
+
+
